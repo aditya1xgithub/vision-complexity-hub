@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 13% 10%;
+    --foreground: 210 20% 92%;
+
+    --card: 220 13% 13%;
+    --card-foreground: 210 20% 92%;
+
+    --popover: 220 13% 13%;
+    --popover-foreground: 210 20% 92%;
+
+    --primary: 142 70% 49%;
+    --primary-foreground: 220 13% 6%;
+
+    --secondary: 220 13% 18%;
+    --secondary-foreground: 210 20% 85%;
+
+    --muted: 220 13% 16%;
+    --muted-foreground: 215 14% 55%;
+
+    --accent: 38 92% 50%;
+    --accent-foreground: 220 13% 6%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 13% 20%;
+    --input: 220 13% 20%;
+    --ring: 142 70% 49%;
+
+    --radius: 0.5rem;
+
+    --chart-green: 142 70% 49%;
+    --chart-blue: 217 91% 60%;
+    --chart-orange: 38 92% 50%;
+    --chart-red: 0 72% 51%;
+    --chart-purple: 270 70% 60%;
+
+    --sidebar-background: 220 13% 8%;
+    --sidebar-foreground: 210 20% 85%;
+    --sidebar-primary: 142 70% 49%;
+    --sidebar-primary-foreground: 220 13% 6%;
+    --sidebar-accent: 220 13% 14%;
+    --sidebar-accent-foreground: 210 20% 92%;
+    --sidebar-border: 220 13% 18%;
+    --sidebar-ring: 142 70% 49%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@layer utilities {
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .glow-green {
+    box-shadow: 0 0 20px hsl(142 70% 49% / 0.15), 0 0 60px hsl(142 70% 49% / 0.05);
+  }
+  .glow-green-sm {
+    box-shadow: 0 0 10px hsl(142 70% 49% / 0.1);
+  }
+  .gradient-border {
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+  }
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, hsl(142 70% 49% / 0.3), hsl(217 91% 60% / 0.3));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
