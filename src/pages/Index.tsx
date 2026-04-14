@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Algorithm, SimulationResult } from "@/lib/algorithms";
 import { AlgorithmSelector } from "@/components/AlgorithmSelector";
 import { SimulationPanel } from "@/components/SimulationPanel";
-import { ComplexityGraph } from "@/components/ComplexityGraph";
+import { GraphTraversal } from "@/components/GraphTraversal";
 import { CodeViewer } from "@/components/CodeViewer";
 import { CodeAnalyzer } from "@/components/CodeAnalyzer";
 import { ComparisonMode } from "@/components/ComparisonMode";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Activity, BarChart3, Code2, GitCompare, Cpu, Sparkles } from "lucide-react";
+import { Activity, Code2, GitCompare, Cpu, Sparkles, Network } from "lucide-react";
 
 const Index = () => {
   const [selected, setSelected] = useState<Algorithm | null>(null);
@@ -73,11 +73,11 @@ const Index = () => {
                   Details
                 </TabsTrigger>
                 <TabsTrigger
-                  value="graph"
+                  value="graph-traversal"
                   className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary rounded-none px-4 text-xs font-medium"
                 >
-                  <BarChart3 className="h-3.5 w-3.5 mr-1.5" />
-                  Growth Graph
+                  <Network className="h-3.5 w-3.5 mr-1.5" />
+                  Graph Traversal
                 </TabsTrigger>
                 <TabsTrigger
                   value="compare"
@@ -100,25 +100,8 @@ const Index = () => {
               <CodeViewer algorithm={selected} />
             </TabsContent>
 
-            <TabsContent value="graph" className="flex-1 p-4 mt-0">
-              <div className="h-[400px] lg:h-[500px]">
-                <ComplexityGraph results={results} />
-              </div>
-              {results.length > 0 && (
-                <div className="mt-4 flex flex-wrap gap-3">
-                  {results.map((r) => (
-                    <div
-                      key={r.algorithm.id}
-                      className="bg-secondary rounded-lg px-3 py-2 border border-border"
-                    >
-                      <p className="text-xs text-muted-foreground">{r.algorithm.name}</p>
-                      <p className="text-sm font-mono font-bold text-primary">
-                        {r.detectedComplexity}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
+            <TabsContent value="graph-traversal" className="flex-1 p-4 mt-0">
+              <GraphTraversal />
             </TabsContent>
 
             <TabsContent value="compare" className="flex-1 p-4 mt-0">
