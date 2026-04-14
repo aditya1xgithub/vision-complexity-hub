@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { algorithms, Algorithm, runSimulation, SimulationResult } from "@/lib/algorithms";
-import { ComplexityGraph } from "./ComplexityGraph";
 import { Button } from "@/components/ui/button";
 import { GitCompare, Play } from "lucide-react";
 
@@ -61,12 +60,12 @@ export function ComparisonMode() {
         variant="outline"
       >
         <Play className="h-4 w-4" />
-        Compare Growth Curves
+        Compare Complexity
       </Button>
 
       {results.length > 0 && (
-        <div className="animate-slide-in">
-          <div className="grid grid-cols-2 gap-3 mb-3">
+        <div className="animate-slide-in space-y-3">
+          <div className="grid grid-cols-2 gap-3">
             {results.map((r) => (
               <div key={r.algorithm.id} className="bg-secondary rounded-lg p-3 border border-border text-center">
                 <p className="text-xs text-muted-foreground">{r.algorithm.name}</p>
@@ -74,8 +73,34 @@ export function ComparisonMode() {
               </div>
             ))}
           </div>
-          <div className="h-64 bg-card rounded-lg border border-border p-2">
-            <ComplexityGraph results={results} />
+
+          {/* Operations comparison table */}
+          <div className="bg-secondary rounded-lg overflow-hidden border border-border">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border">
+                  <th className="text-left px-3 py-2 text-xs text-muted-foreground font-medium">n</th>
+                  <th className="text-right px-3 py-2 text-xs text-muted-foreground font-medium">{results[0]?.algorithm.name}</th>
+                  <th className="text-right px-3 py-2 text-xs text-muted-foreground font-medium">{results[1]?.algorithm.name}</th>
+                  <th className="text-right px-3 py-2 text-xs text-muted-foreground font-medium">Winner</th>
+                </tr>
+              </thead>
+              <tbody>
+                {inputSizes.map((n, i) => {
+                  const opsA = results[0]?.operations[i] ?? 0;
+                  const opsB = results[1]?.operations[i] ?? 0;
+                  const winner = opsA < opsB ? results[0]?.algorithm.name : opsB < opsA ? results[1]?.algorithm.name : "Tie";
+                  return (
+                    <tr key={n} className="border-b border-border/50 last:border-0">
+                      <td className="px-3 py-1.5 font-mono text-foreground text-xs">{n.toLocaleString()}</td>
+                      <td className={`px-3 py-1.5 text-right font-mono text-xs ${opsA <= opsB ? "text-primary font-bold" : "text-muted-foreground"}`}>{opsA.toLocaleString()}</td>
+                      <td className={`px-3 py-1.5 text-right font-mono text-xs ${opsB <= opsA ? "text-primary font-bold" : "text-muted-foreground"}`}>{opsB.toLocaleString()}</td>
+                      <td className="px-3 py-1.5 text-right text-xs text-accent">{winner}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </div>
       )}

@@ -41,6 +41,8 @@ export function SimulationPanel({ algorithm, onResult }: Props) {
     "O(n)": "text-chart-green",
     "O(n log n)": "text-chart-orange",
     "O(n²)": "text-chart-red",
+    "O(n³)": "text-chart-red",
+    "O(V+E)": "text-chart-blue",
   };
 
   return (
