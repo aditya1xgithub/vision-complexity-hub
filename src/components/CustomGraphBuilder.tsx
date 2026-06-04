@@ -74,7 +74,7 @@ export function CustomGraphBuilder({ onApply }: Props) {
       </div>
 
       {/* Vertex count */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 flex-wrap">
         <label className="text-xs text-muted-foreground whitespace-nowrap">Vertices (2-15):</label>
         <Input
           type="number"
@@ -84,9 +84,17 @@ export function CustomGraphBuilder({ onApply }: Props) {
           onChange={(e) => setNodeCount(Math.min(15, Math.max(2, parseInt(e.target.value) || 2)))}
           className="w-20 h-8 text-xs"
         />
-        <span className="text-[10px] text-muted-foreground">
-          IDs: 0({labels[0]}) – {nodeCount - 1}({labels[nodeCount - 1] || nodeCount - 1})
+      </div>
+
+      {/* Helper banner explaining 0-indexed IDs */}
+      <div className="bg-primary/10 border border-primary/30 rounded p-2 text-[11px] text-foreground leading-relaxed">
+        ⚠️ Vertex IDs are <span className="font-bold text-primary">0-indexed</span>. For {nodeCount} vertices use IDs:{" "}
+        <span className="font-mono text-primary">
+          {Array.from({ length: nodeCount }, (_, i) => `${i}(${labels[i] || i})`).join(", ")}
         </span>
+        <div className="text-muted-foreground mt-1">
+          Example: to connect A→B with weight 5, enter From=<span className="font-mono text-primary">0</span>, To=<span className="font-mono text-primary">1</span>, Weight=<span className="font-mono text-primary">5</span>
+        </div>
       </div>
 
       {/* Edges */}
