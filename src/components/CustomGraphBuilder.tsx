@@ -60,7 +60,7 @@ export function CustomGraphBuilder({ onApply }: Props) {
     }
 
     setError("");
-    const nodes = layoutNodesCircle(nodeCount);
+    const nodes = layoutNodesCircle(nodeCount, parsedEdges);
     onApply({ nodes, edges: parsedEdges });
   };
 
