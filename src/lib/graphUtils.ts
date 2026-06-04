@@ -77,6 +77,7 @@ export function bfsOrder(nodeCount: number, adj: number[][]): number[][] {
 }
 
 export function dfsOrder(nodeCount: number, adj: number[][]): number[][] {
+  if (nodeCount === 0) return [];
   const visited = new Set<number>();
   const steps: number[][] = [];
   function dfs(node: number) {
@@ -86,7 +87,9 @@ export function dfsOrder(nodeCount: number, adj: number[][]): number[][] {
       if (!visited.has(nb)) dfs(nb);
     }
   }
-  dfs(0);
+  for (let i = 0; i < nodeCount; i++) {
+    if (!visited.has(i)) dfs(i);
+  }
   return steps;
 }
 
