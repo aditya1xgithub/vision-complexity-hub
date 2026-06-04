@@ -177,58 +177,26 @@ export const NODE_COLORS: Record<NodeState, string> = {
 // When edges are provided, reorder nodes around the circle using BFS so
 // connected vertices sit next to each other — this dramatically reduces
 // edge crossings and produces a cleaner, less complex looking diagram.
+// Simple, predictable circular layout — nodes placed in ID order around
+// a circle. Keeps diagrams easy to read (e.g. 0-1-2-3-0 becomes a clean
+// square along the rim with no crossings).
 export function layoutNodesCircle(
   count: number,
-  edges?: GraphEdge[],
+  _edges?: GraphEdge[],
   cx = 210,
   cy = 155,
   r = 110
 ): GraphNode[] {
   const labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-  let order: number[] = Array.from({ length: count }, (_, i) => i);
-  if (edges && edges.length > 0) {
-    const adj: number[][] = Array.from({ length: count }, () => []);
-    edges.forEach((e) => {
-      if (e.from >= 0 && e.from < count && e.to >= 0 && e.to < count) {
-        adj[e.from].push(e.to);
-        adj[e.to].push(e.from);
-      }
-    });
-    const visited = new Set<number>();
-    const bfsOrder: number[] = [];
-    // Start from the highest-degree node for a tighter layout
-    const startCandidates = Array.from({ length: count }, (_, i) => i)
-      .sort((a, b) => adj[b].length - adj[a].length);
-    for (const s of startCandidates) {
-      if (visited.has(s)) continue;
-      const q = [s];
-      visited.add(s);
-      while (q.length) {
-        const v = q.shift()!;
-        bfsOrder.push(v);
-        const nbs = [...adj[v]].sort((a, b) => adj[b].length - adj[a].length);
-        for (const nb of nbs) {
-          if (!visited.has(nb)) {
-            visited.add(nb);
-            q.push(nb);
-          }
-        }
-      }
-    }
-    if (bfsOrder.length === count) order = bfsOrder;
-  }
-
-  const result: GraphNode[] = new Array(count);
-  for (let pos = 0; pos < count; pos++) {
-    const id = order[pos];
-    const angle = (2 * Math.PI * pos) / count - Math.PI / 2;
-    result[id] = {
-      id,
+  const result: GraphNode[] = [];
+  for (let i = 0; i < count; i++) {
+    const angle = (2 * Math.PI * i) / count - Math.PI / 2;
+    result.push({
+      id: i,
       x: Math.round(cx + r * Math.cos(angle)),
       y: Math.round(cy + r * Math.sin(angle)),
-      label: labels[id] || `${id}`,
-    };
+      label: labels[i] || `${i}`,
+    });
   }
   return result;
 }
