@@ -21,9 +21,15 @@ export function GraphTraversal() {
   const [speed, setSpeed] = useState(800);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Active graph data
-  const activeNodes: GraphNode[] = graphMode === "custom" && customGraph ? customGraph.nodes : DEFAULT_NODES;
-  const activeEdges: GraphEdge[] = graphMode === "custom" && customGraph ? customGraph.edges : DEFAULT_EDGES;
+  // Active graph data (memoized so effect deps are stable)
+  const activeNodes: GraphNode[] = useMemo(
+    () => (graphMode === "custom" && customGraph ? customGraph.nodes : DEFAULT_NODES),
+    [graphMode, customGraph]
+  );
+  const activeEdges: GraphEdge[] = useMemo(
+    () => (graphMode === "custom" && customGraph ? customGraph.edges : DEFAULT_EDGES),
+    [graphMode, customGraph]
+  );
   const adj = useMemo(() => buildAdj(activeNodes.length, activeEdges), [activeNodes, activeEdges]);
 
   const reset = useCallback(() => {
