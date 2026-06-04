@@ -54,18 +54,22 @@ export function buildAdj(nodeCount: number, edges: GraphEdge[]): number[][] {
 
 // ─── Traversal algorithms ─────────────────────────────────────
 export function bfsOrder(nodeCount: number, adj: number[][]): number[][] {
+  if (nodeCount === 0) return [];
   const visited = new Set<number>();
   const steps: number[][] = [];
-  const queue = [0];
-  visited.add(0);
-  steps.push([0]);
-  while (queue.length > 0) {
-    const node = queue.shift()!;
-    for (const nb of adj[node] || []) {
-      if (!visited.has(nb)) {
-        visited.add(nb);
-        queue.push(nb);
-        steps.push([...visited]);
+  for (let start = 0; start < nodeCount; start++) {
+    if (visited.has(start)) continue;
+    const queue = [start];
+    visited.add(start);
+    steps.push([...visited]);
+    while (queue.length > 0) {
+      const node = queue.shift()!;
+      for (const nb of adj[node] || []) {
+        if (!visited.has(nb)) {
+          visited.add(nb);
+          queue.push(nb);
+          steps.push([...visited]);
+        }
       }
     }
   }
