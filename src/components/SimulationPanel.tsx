@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Algorithm, runSimulation, SimulationResult } from "@/lib/algorithms";
-import { Play, Plus, X, Zap } from "lucide-react";
+import { Play, Plus, X, Zap, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -118,6 +118,26 @@ export function SimulationPanel({ algorithm, onResult }: Props) {
               {result.detectedComplexity}
             </span>
           </div>
+
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              className="flex-1 gap-1.5 text-xs"
+              onClick={() => exportReport(result, "json")}
+            >
+              <Download className="h-3.5 w-3.5" /> JSON
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              className="flex-1 gap-1.5 text-xs"
+              onClick={() => exportReport(result, "csv")}
+            >
+              <Download className="h-3.5 w-3.5" /> CSV
+            </Button>
+          </div>
+
 
           <div className="bg-secondary rounded-lg overflow-hidden">
             <table className="w-full text-sm">
