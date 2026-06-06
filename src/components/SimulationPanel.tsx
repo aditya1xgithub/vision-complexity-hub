@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Algorithm, runSimulation, SimulationResult } from "@/lib/algorithms";
-import { Play, Plus, X, Zap } from "lucide-react";
+import { Play, Plus, X, Zap, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -10,6 +10,48 @@ interface Props {
 }
 
 const presets = [10, 100, 1000, 5000, 10000];
+
+function exportReport(result: SimulationResult, format: "json" | "csv") {
+  const safe = result.algorithm.id.replace(/[^a-z0-9-]/gi, "_");
+  let content: string;
+  let mime: string;
+  let ext: string;
+  if (format === "json") {
+    content = JSON.stringify(
+      {
+        algorithm: result.algorithm.name,
+        id: result.algorithm.id,
+        expectedComplexity: result.algorithm.expectedClass,
+        detectedComplexity: result.detectedComplexity,
+        spaceComplexity: result.algorithm.spaceComplexity,
+        data: result.inputSizes.map((n, i) => ({ n, operations: result.operations[i] })),
+        timestamp: new Date().toISOString(),
+      },
+      null,
+      2
+    );
+    mime = "application/json"; ext = "json";
+  } else {
+    const rows = [
+      ["Algorithm", result.algorithm.name],
+      ["Detected Complexity", result.detectedComplexity],
+      ["Expected Complexity", result.algorithm.expectedClass],
+      [],
+      ["n", "operations"],
+      ...result.inputSizes.map((n, i) => [n, result.operations[i]]),
+    ];
+    content = rows.map((r) => r.join(",")).join("\n");
+    mime = "text/csv"; ext = "csv";
+  }
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `algovision_${safe}_${Date.now()}.${ext}`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 
 export function SimulationPanel({ algorithm, onResult }: Props) {
   const [inputSizes, setInputSizes] = useState<number[]>([10, 100, 1000, 10000]);
@@ -118,6 +160,26 @@ export function SimulationPanel({ algorithm, onResult }: Props) {
               {result.detectedComplexity}
             </span>
           </div>
+
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              className="flex-1 gap-1.5 text-xs"
+              onClick={() => exportReport(result, "json")}
+            >
+              <Download className="h-3.5 w-3.5" /> JSON
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              className="flex-1 gap-1.5 text-xs"
+              onClick={() => exportReport(result, "csv")}
+            >
+              <Download className="h-3.5 w-3.5" /> CSV
+            </Button>
+          </div>
+
 
           <div className="bg-secondary rounded-lg overflow-hidden">
             <table className="w-full text-sm">
