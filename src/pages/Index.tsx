@@ -6,8 +6,11 @@ import { GraphTraversal } from "@/components/GraphTraversal";
 import { CodeViewer } from "@/components/CodeViewer";
 import { CodeAnalyzer } from "@/components/CodeAnalyzer";
 import { ComparisonMode } from "@/components/ComparisonMode";
+import { SortingVisualizer } from "@/components/SortingVisualizer";
+import { QuizMode } from "@/components/QuizMode";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Activity, Code2, GitCompare, Cpu, Sparkles, Network } from "lucide-react";
+import { Activity, Code2, GitCompare, Cpu, Sparkles, Network, BarChart3, GraduationCap } from "lucide-react";
+
 
 const Index = () => {
   const [selected, setSelected] = useState<Algorithm | null>(null);
@@ -87,11 +90,25 @@ const Index = () => {
                   Compare
                 </TabsTrigger>
                 <TabsTrigger
+                  value="sorting"
+                  className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary rounded-none px-4 text-xs font-medium"
+                >
+                  <BarChart3 className="h-3.5 w-3.5 mr-1.5" />
+                  Sort Visualizer
+                </TabsTrigger>
+                <TabsTrigger
                   value="analyze"
                   className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary rounded-none px-4 text-xs font-medium"
                 >
                   <Sparkles className="h-3.5 w-3.5 mr-1.5" />
                   Analyze Code
+                </TabsTrigger>
+                <TabsTrigger
+                  value="quiz"
+                  className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary rounded-none px-4 text-xs font-medium"
+                >
+                  <GraduationCap className="h-3.5 w-3.5 mr-1.5" />
+                  Viva Quiz
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -108,9 +125,18 @@ const Index = () => {
               <ComparisonMode />
             </TabsContent>
 
+            <TabsContent value="sorting" className="flex-1 p-4 mt-0">
+              <SortingVisualizer />
+            </TabsContent>
+
             <TabsContent value="analyze" className="flex-1 p-4 mt-0">
               <CodeAnalyzer />
             </TabsContent>
+
+            <TabsContent value="quiz" className="flex-1 p-4 mt-0">
+              <QuizMode />
+            </TabsContent>
+
           </Tabs>
         </main>
 
